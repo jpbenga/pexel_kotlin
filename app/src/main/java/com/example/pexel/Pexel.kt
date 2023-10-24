@@ -9,6 +9,7 @@ import android.view.View
 import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
@@ -21,8 +22,11 @@ import retrofit2.create
 class Pexel : AppCompatActivity() {
 
     private lateinit var binding: ActivityPexelBinding
+    private lateinit var pexelAdapter: PexelAdapter
+
     private val idKey = "ID_KEY"
     private val apiKey = "cYHmkDDXEPRHAjpeM4h8oTjXtUSCs5HCGUu0TdFE7zDc6PIhBQhJMrGU"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,10 +81,9 @@ class Pexel : AppCompatActivity() {
                 val body = response.body()
                 // à modifier de TOUTE URGENCE!!!!!!!!!!!
                 if (body != null) {
-                    binding.photoTitle.text = Editable.Factory.getInstance().newEditable(body.photos[0].alt)
-                    val glideUrl = body.photos[0].src?.original
-                    Glide.with(applicationContext).load(glideUrl)
-                        .into(binding.imageView)
+                   pexelAdapter = PexelAdapter(body.photos)
+                    binding.photoRV.adapter = pexelAdapter
+                    binding.photoRV.layoutManager = LinearLayoutManager(this)
                 }
             }
         }
