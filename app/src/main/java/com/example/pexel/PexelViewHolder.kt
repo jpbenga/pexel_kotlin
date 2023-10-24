@@ -17,8 +17,10 @@ class PexelViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     }
 
     fun bind(
-        photo: Photos
+        photo: Photos,
+        informationCallback: InformationCallback
     ){
+        image.setOnClickListener{ informationCallback.getInformation(photo)}
         Glide.with(image.context)
             .load(photo.src?.original)
             .into(image)

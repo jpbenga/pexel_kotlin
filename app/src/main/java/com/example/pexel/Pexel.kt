@@ -1,6 +1,7 @@
 package com.example.pexel
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Photo
@@ -13,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
+import com.example.pexel.databinding.ActivityInformationBinding
 import com.example.pexel.databinding.ActivityPexelBinding
+import com.example.pexel.databinding.ListeImageBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +29,11 @@ class Pexel : AppCompatActivity() {
 
     private val idKey = "ID_KEY"
     private val apiKey = "cYHmkDDXEPRHAjpeM4h8oTjXtUSCs5HCGUu0TdFE7zDc6PIhBQhJMrGU"
+
+    companion object {
+        val photographerKey = "photographerKey"
+        val imageKey = "imageKey"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,14 +87,27 @@ class Pexel : AppCompatActivity() {
 
             if(response.body() != null){
                 val body = response.body()
-                // à modifier de TOUTE URGENCE!!!!!!!!!!!
+
                 if (body != null) {
-                   pexelAdapter = PexelAdapter(body.photos)
+                   pexelAdapter = PexelAdapter(
+                       body.photos,
+                       object: InformationCallback{
+                           override fun getInformation(photo: Photos) {
+                               goToNextActivity(photo)
+                           }
+                       })
                     binding.photoRV.adapter = pexelAdapter
                     binding.photoRV.layoutManager = LinearLayoutManager(this)
                 }
             }
         }
+
+    fun goToNextActivity(photo: Photos){
+        val intent = Intent(this, InformationActivity::class.java)
+        intent.putExtra(photographerKey, photo.photographer)
+        intent.putExtra(imageKey, photo.src?.original)
+        startActivity(intent)
+    }
 
     private fun writeIdToSharePreferences(){
         getPreferences(Context.MODE_PRIVATE)

@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Pexel"
         tools:targetApi="31">
         <activity
+            android:name=".InformationActivity"
+            android:exported="false" />
+        <activity
             android:name=".Pexel"
             android:exported="true">
             <intent-filter>

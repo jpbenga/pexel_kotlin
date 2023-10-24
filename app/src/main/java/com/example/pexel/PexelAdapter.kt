@@ -5,13 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 
-class PexelAdapter(listePhotos: MutableList<Photos>): Adapter<PexelViewHolder>() {
-
-    private var listePhotos = mutableListOf<Photos>()
-
-    init{
-        this.listePhotos = listePhotos
-    }
+class PexelAdapter(var listePhotos: MutableList<Photos>, var informationCallback: InformationCallback): Adapter<PexelViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PexelViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,6 +18,6 @@ class PexelAdapter(listePhotos: MutableList<Photos>): Adapter<PexelViewHolder>()
     }
 
     override fun onBindViewHolder(holder: PexelViewHolder, position: Int) {
-        holder.bind(listePhotos[position])
+        holder.bind(listePhotos[position], informationCallback)
     }
 }
